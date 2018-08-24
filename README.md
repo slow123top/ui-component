@@ -1,7 +1,8 @@
 # MyUiComponent
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.4.
-制作模态框组件   支持可拖拽  最大化  还原   设置大小  记录上次弹出位置  头部模板  内容模板等   也许还存在bug   基本可以使用
+1、制作模态框组件制作模态框组件   支持可拖拽  最大化  还原   设置大小  记录上次弹出位置  头部模板  内容模板等   也许还存在bug   基本可以使用
+2、制作tabs组件，使用父子嵌套的方式，可删除   可设置点击  可设置选中  待改进
 
 ## Development server
 
