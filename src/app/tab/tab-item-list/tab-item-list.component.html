@@ -1,0 +1,12 @@
+<ul [class.overflow]="overflowWidth">
+    <li *ngFor="let tabItem of tabItemListResults;let i=index" 
+    [class.active]="selectTabItem===tabItem"
+    [class.disabled]="tabItem.disabled" 
+    (click)="selectTab(tabItem)">
+        {{tabItem.tabTitle}}
+        <button kendoButton [icon]="'close'" [look]="'flat'" *ngIf="close" (click)="closeTab(i)"></button>
+    </li>
+</ul>
+<div class="tab-body">
+    <ng-content></ng-content>
+</div>

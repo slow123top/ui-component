@@ -1,0 +1,40 @@
+ul {
+    list-style: none;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    color: white;
+}
+
+ul li {
+    cursor: pointer;
+    padding: .2rem .5rem;
+    text-decoration: none;
+    margin-left: -1px;
+    float: left;
+    color: #ff0000;
+    text-align: center;
+    border-radius: 2px;
+}
+
+ul li:hover {
+    color: #424244;
+}
+
+ul li.active {
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-bottom: 1px solid #fff;
+    color: black;
+}
+
+.tab-body {
+    margin-top: -1px;
+    padding: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, .2);
+}
+
+ul li.disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: .6;
+}

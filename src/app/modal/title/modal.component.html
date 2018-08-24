@@ -1,0 +1,55 @@
+<!-- modal -->
+<div [style.width]="screenWidth" [style.height]="screenHeight" 
+[style.visibility]="modalVisible"
+ style="position: absolute;top:0;left: 0;
+bottom:0;right:0;background-color: rgba(0,0,0,.5);z-index:1999"
+(mousemove)="mousemoveDialog($event)"
+(mouseup)="mouseupDialog($event)">
+    <!-- dialog -->
+    <div class="modal-dialog-whole" [style.width]="dialogWidth+'px'" 
+    [style.height]="dialogHeight+'px'" 
+    [style.top]="top" 
+    [style.left]="left"
+     [style.cursor]="cursorStyle"
+        style="position: relative;z-index: 2000;
+        background-color: #fff;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, .3);
+        box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, .3) outset;">
+        <!-- title -->
+        <!-- close -->
+        <!-- 标题 -->
+        <!-- 头部模板 和标题  标题和头部模板不能同时出现-->
+        <div [style.text-align]="position" [style.font-size]="size" 
+        style="text-align: right;padding: .5rem;border-bottom:1px solid rgba(0,0,0,.3);"
+        (mousedown)="mousedownDialog($event)"
+        (mousemove)="mousemoveDialog($event)" 
+            (mouseup)="mouseupDialog($event)"
+            (mouseover)="mouseoverDialog()"
+            (mouseout)="mouseoutDialog()"
+            (selectstart)="'return false'">
+            <div style="float: left;">
+                <span *ngIf="!headerTmp">{{title}}</span>
+                <ng-container *ngIf="headerTmp">
+                    <ng-template [ngTemplateOutlet]="headerTmp"></ng-template>
+                </ng-container>
+            </div>
+            <div style="float:right">
+                    <button kendoButton [icon]="'window-maximize'" (click)="maxModal($event)" *ngIf="!maxFlag"></button>
+                    <button kendoButton [icon]="'window-restore'" (click)="minModal()" *ngIf="maxFlag"></button>
+                    <button class="close" kendoButton [icon]="'close'" (click)="closeModal($event)"></button>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+        <div class="dialog-bodytmp" style="padding: .5rem">
+            <ng-container *ngIf="bodyTmp">
+            <ng-template [ngTemplateOutlet]="bodyTmp"></ng-template>
+            </ng-container>
+        </div>
+        <!-- <div class="dialog-footer" *ngIf="footerTmp" style="padding:.5rem;text-align:right;margin-bottom: 1rem">
+            <ng-container>
+                <ng-template [ngTemplateOutlet]="footerTmp"></ng-template>
+            </ng-container>
+        </div> -->
+    </div>
+</div>
