@@ -1,0 +1,45 @@
+.panel-item {
+    flex: 1 1 auto;
+    width: 100%;
+    border-bottom: 1px solid #dcdee2;
+}
+
+.panel-item-header {
+    background: #f7f7f7;
+    padding: .5rem 1rem .5rem 0;
+    /* cursor: pointer; */
+}
+
+.panel-item-click {
+    float: left;
+    cursor: pointer;
+    /* border-right: 1px solid #dcdee2; */
+}
+
+.panel-item-title {
+    float: left;
+}
+
+.panel-item-tool {
+    float: right;
+    /* width: 50% */
+}
+
+.panel-item-clear {
+    clear: both;
+}
+
+.panel-item-body {
+    padding: 0 1rem;
+    background: #fff;
+}
+
+.panel-item.disabled {
+    pointer-events: none;
+    opacity: .5;
+}
+
+.single {
+    border: 1px solid #dcdee2;
+    /* border-radius: 5px; */
+}

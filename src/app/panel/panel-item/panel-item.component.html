@@ -1,0 +1,32 @@
+<div class="card" [class.single]="single" [class.disabled]="disabled" [style.width]="width" [style.height]="height">
+    <!-- 标题  是否有模板 -->
+    <div class="card-header">
+        <div class="panel-item-click" (click)="selectPanelItem($event)">
+                <span class="k-icon k-i-arrow-60-right" *ngIf="!active"></span>
+                <span class="k-icon k-i-arrow-60-down"  *ngIf="active"></span>
+                <!-- <button kendoButton [icon]="'arrow-60-right'" (click)="selectPanelItem($event)" *ngIf="!active"></button>
+                <button kendoButton [icon]="'arrow-60-down'" (click)="selectPanelItem($event)"  *ngIf="active"></button> -->
+        </div>
+<div class="panel-item" [class.disabled]="disabled">
+    <!-- 标题  是否有模板 -->
+    <div class="panel-item-header" (click)="selectPanelItem($event)">
+        <div class="panel-item-title">
+            <ng-container *ngIf="!headRef">
+                {{tabTitle}}
+            </ng-container>
+            <ng-container *ngIf="headRef">
+                <ng-template [ngTemplateOutlet]="headRef"></ng-template>
+            </ng-container>
+        </div>
+        <div class="panel-item-tool" *ngIf="toolTempl">
+            <ng-template [ngTemplateOutlet]="toolTempl"></ng-template>
+        </div>
+        <div class="panel-item-clear">
+        </div>
+    </div>
+    <!-- panel内容模板 -->
+    <div class="card-body" [@dropAnimation]="active">
+
+        <ng-template [ngTemplateOutlet]="contentRef"></ng-template>
+    </div>
+</div>

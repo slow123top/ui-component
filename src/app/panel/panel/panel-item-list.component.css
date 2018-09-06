@@ -1,0 +1,9 @@
+.panel.panel-border {
+    border: 1px solid #dcdee2;
+    border-radius: 5px;
+    background: #f7f7f7;
+}
+
+.panel-item:last-of-type {
+    border-bottom: none;
+}
