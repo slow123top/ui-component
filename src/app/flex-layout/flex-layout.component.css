@@ -1,0 +1,10 @@
+.flex-layout {
+    display: -webkit-flex;
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid;
+}
+
+.flex-layout>div {
+    flex: 3 2 auto;
+}
