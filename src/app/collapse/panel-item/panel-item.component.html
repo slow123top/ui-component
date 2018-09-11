@@ -1,0 +1,25 @@
+<div class="card" 
+[class.f-state-selected]="active"
+ [class.f-state-default]="!active&&!disabled"
+    [class.f-state-disabled]="disabled"
+    [class.disabled]="disabled">
+    <div class="card-header" (click)="selectPanel($event)">
+        <ng-container *ngIf="!headTempl">
+            <span [class.accordion-title]="accordionTitle">
+                {{title}}
+            </span>
+        </ng-container>
+        <ng-container *ngIf="headTempl">
+            <ng-template [ngTemplateOutlet]="headTempl"></ng-template>
+        </ng-container>
+        <span class="f-icon" [class.f-accordion-collapse]="!active&&!disabled"></span>
+        <span class="f-icon" [class.f-accordion-expand]="active||disabled"></span>
+        <div class="card-tool" style="float:right">
+            <ng-template [ngTemplateOutlet]="toolTempl"></ng-template>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    <div class="card-body" [@dropAnimation]="active">
+        <ng-template [ngTemplateOutlet]="contentTempl"></ng-template>
+    </div>
+</div>
