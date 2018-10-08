@@ -1,0 +1,79 @@
+<div class="filter-row" [style.width]="width + 'px'" *ngIf="showFilterBar">
+    <form class="form-row">
+        <div class="search-fields">
+            <select class="custom-select" [(ngModel)]="searchData.field" name="field">
+                <option value="*">所有列</option>
+                <option *ngFor="let col of columns" value="{{col.field}}">{{ col.title }}</option>
+            </select>
+        </div>
+        <div class="search-text flex-fill">
+            <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="searchData.value" name="value" />
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" (click)="onSearch()">查询</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div [ngStyle]="{'height': height +'px', 'width': width +'px' }" class="farris-datatable-container">
+    <div class="farris-datatable">
+        <div #tableHeader class="farris-table-header">
+            <datatable-header #dtHeader [columns]="columns" [singleSelect]="singleSelect"
+            [data]="copyData" 
+            [(rows)]="data"
+            (checkedAll)="onCheckAll($event)"
+            (sortChange)="headerSortChange($event)">
+                <ng-content select="data-columns"></ng-content>
+            </datatable-header>
+            <div class="farris-table-fixed-header" [style.width]="fixedLeftWidth" *ngIf="hasFixed">
+                <datatable-fixed-header #dtHeader [columns]="columns" [singleSelect]="singleSelect" (checkedAll)="onCheckAll($event)">
+                    <ng-content select="data-columns"></ng-content>
+                </datatable-fixed-header>
+            </div>
+            <div class="farris-table-fixed-right-header" [style.width]="fixedRightWidth" *ngIf="hasFixed">
+                <datatable-fixed-right-header #dtHeader [columns]="columns" [singleSelect]="singleSelect" (checkedAll)="onCheckAll($event)">
+                    <ng-content select="data-columns"></ng-content>
+                </datatable-fixed-right-header>
+            </div>
+        </div>
+        <div #scorllableBody class="farris-table-scorllable-body" [style.height]="scorllableBodyHeight + 'px'">
+            <perfect-scrollbar #perfectScrollbar [config]="{}" (psScrollX)="onScrollX($event)" (psScrollY)="onScrollY($event)">
+                <ng-container [style.display]="data && data.length ? 'block': 'none'">
+                    <datatable-body #dtBody [rows]="data | paginate: paginationOptions" [columns]="columns" [striped]="striped"
+                        [bordered]="bordered" [hover]="hover" [rowClassName]="rowClassName"
+                        [cellClassName]="cellClassName">
+                    </datatable-body>
+                    <div #dtLeftFixed class="farris-table-fixed-body" *ngIf="hasFixed" [style.width]="fixedLeftWidth">
+                        <datatable-fixed #dtBody [rows]="data | paginate: paginationOptions" [columns]="columns"
+                            [striped]="striped" [bordered]="bordered" [hover]="hover" [rowClassName]="rowClassName"
+                            [cellClassName]="cellClassName">
+                        </datatable-fixed>
+                    </div>
+                    <div #dtRightFixed class="farris-table-fixed-right-body" *ngIf="hasFixed" [style.width]="fixedRightWidth">
+                        <datatable-fixed-right #dtBody [rows]="data | paginate: paginationOptions" [columns]="columns"
+                            [striped]="striped" [bordered]="bordered" [hover]="hover" [rowClassName]="rowClassName"
+                            [cellClassName]="cellClassName">
+                        </datatable-fixed-right>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!(data && data.length)">
+                    <h1 style="text-align:center;color:#ccc; margin-top: 50px;">！！空空如也！！</h1>
+                </ng-container>
+            </perfect-scrollbar>
+        </div>
+        <div class="farris-table-header" *ngIf="footer">
+            <ng-template [ngTemplateOutlet]="footer">
+            </ng-template>
+        </div>
+        <div *ngIf="pagination" #tablePager class="farris-table-pager">
+            <pagination-controls [id]="paginationOptions.id" [maxSize]="maxSize" [directionLinks]="directionLinks"
+                [autoHide]="autoHide" [responsive]="responsive" [previousLabel]="labels.previousLabel" [nextLabel]="labels.nextLabel"
+                [screenReaderPaginationLabel]="labels.screenReaderPaginationLabel" [screenReaderPageLabel]="labels.screenReaderPageLabel"
+                [screenReaderCurrentLabel]="labels.screenReaderCurrentLabel" (pageChange)="onPageChange($event)"
+                (pageSizeChange)="onPageSizeChange($event)">
+            </pagination-controls>
+        </div>
+        <div #dragLine *ngIf="dragable" class="column-resizer-helper"></div>
+    </div>
+</div>

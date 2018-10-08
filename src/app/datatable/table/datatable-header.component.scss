@@ -1,0 +1,26 @@
+th {
+    &>div {
+        display: inline-block;
+        &>span.sort-container {
+            position: relative;
+            display: inline-block;
+            width: 1em;
+            height: 1.2em;
+        }
+    }
+    & span.k-icon {
+        position: absolute;
+        left: 0;
+        opacity: .5;
+        cursor: pointer;
+    }
+    & span.k-i-arrow-60-up {
+        top: 0;
+    }
+    & span.k-i-arrow-60-down {
+        top: .5em;
+    }
+    & span.clicked {
+        opacity: 1;
+    }
+}
