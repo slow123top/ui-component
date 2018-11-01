@@ -1,4 +1,4 @@
-import { Directive, HostListener, ElementRef, NgZone, Renderer2, AfterViewInit, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, NgZone, Renderer2, AfterViewInit, OnDestroy } from '@angular/core';
 import { DataTableComponent } from '../datatable.component';
 @Directive({
     selector: '[drag-column]'
@@ -20,11 +20,9 @@ export class DragColumnDirective implements AfterViewInit, OnDestroy {
     ngAfterViewInit() {
         if (this.isEnable()) {
             this.render.addClass(this.el.nativeElement, 'resizable-column');
-
             this.resizer = document.createElement('span');
             this.resizer.className = 'column-resizer';
             this.el.nativeElement.appendChild(this.resizer);
-
             this.ngzone.runOutsideAngular(() => {
                 this.resizerMouseDownListener = this.onMouseDown.bind(this);
                 this.resizer.addEventListener('mousedown', this.resizerMouseDownListener);
@@ -33,7 +31,7 @@ export class DragColumnDirective implements AfterViewInit, OnDestroy {
     }
 
     isEnable() {
-        return this.dt.dragable;
+        return this.dt.dragable && !this.dt.hasFixed;
     }
 
     bindDocumentEvents() {

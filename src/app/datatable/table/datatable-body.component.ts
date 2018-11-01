@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, forwardRef, Optional, SkipSelf, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Inject, forwardRef, Optional, SkipSelf, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
 import { DataTableColumn, convertColumns } from '../datatable-column';
 import { DataTableService } from '../datatable.service';
 import { DataTableComponent } from '../datatable.component';
@@ -7,32 +7,48 @@ import { DataTableComponent } from '../datatable.component';
     selector: 'datatable-body',
     template: `
     <table class="table"
+    [class.table-sm]="size==='small'"
     [class.table-hover]="hover"
     [class.table-striped]="striped"
     [class.table-bordered]="bordered">
         <colgroup>
-            <col class="dt-checkbox-cell" *ngIf="!dt.singleSelect"/>
+            <col class="dt-checkbox-cell" *ngIf="!dt.singleSelect&&fixed!=='right'"/>
             <col *ngFor="let col of columns" [style.width]="col.width + 'px'" />
         </colgroup>
         <tbody class="ui-table-tbody">
             <ng-container *ngIf="!isRowTempl">
-                <tr [ngClass]="createRowClassName(row,i)"
-                *ngFor="let row of rows ; let i=index" (click)="selectedRow($event,i, row)"
+                <tr farris-hover [ngClass]="createRowClassName(row,i)"
+                *ngFor="let row of rows ; let i = index"
                  [class.selected]="isSelected(row)">
-                    <td class="dt-checkbox-cell" *ngIf="!dt.singleSelect">
+                    <td class="dt-checkbox-cell" *ngIf="!dt.singleSelect&&fixed!=='right'">
                         <dt-checkbox [checked]="isSelected(row)" (checkedChange)="onChecked($event, i, row)"></dt-checkbox>
                     </td>
                     <td
                     farris-column-res
                     [media]="col.media"
                     [ngClass]="getTdClassName(row[col.field],col)"
+                    (click)="cellEdit($event,col,i)"
                     *ngFor="let col of columns">
                         <ng-container *ngIf="!col.cellTempl; else cellTemp">
                             <span *ngIf="col.formatter" [innerHtml]=" formatData( row[col.field], col.formatter)">
                             </span>
-                            <span *ngIf="!col.formatter">{{ row[col.field] }}</span>
+                            <div *ngIf="!col.formatter">
+                                <span *ngIf="!edit[i+col.field]&&col.edit==='date'">{{row[col.field]|kendoDate:'MM/dd/yyyy'}}</span>
+                                <span *ngIf="!edit[i+col.field]&&col.edit!=='date'">{{row[col.field]}}</span>
+                                <input farris-edit-focus kendoTextBox [(ngModel)]="row[col.field]"
+                                (blur)="closeCellEdit(i+col.field)" *ngIf="col.edit==='text'&&edit[i+col.field]"/>
+                                <input farris-edit-focus id="numberInput" type="number" [(ngModel)]="row[col.field]"
+                                (blur)="closeCellEdit(i+col.field)"
+                                style="width:100%;height:100%" *ngIf="col.edit==='number'&&edit[i+col.field]"/>
+                                <input farris-edit-focus type="checkbox" [(ngModel)]="row[col.field]"
+                                (blur)="closeCellEdit(i+col.field)" *ngIf="col.edit==='boolean'&&edit[i+col.field]"/>
+                                <input farris-edit-focus type="date" [(ngModel)]="row[col.field]"
+                                (blur)="closeCellEdit(i+col.field)" *ngIf="col.edit==='date'&&edit[i+col.field]"/>
+                            </div>
                         </ng-container>
-                        <ng-template #cellTemp [ngTemplateOutlet]="col.cellTempl"></ng-template>
+                        <ng-template #cellTemp
+                        [ngTemplateOutlet]="col.cellTempl"
+                        [ngTemplateOutletContext]="{ $implicit: row,rowIndex:i,value:row[col.field] }"></ng-template>
                     </td>
                 </tr>
             </ng-container>
@@ -45,16 +61,31 @@ import { DataTableComponent } from '../datatable.component';
             </ng-container>
         </tbody>
     </table>
-    `
+    `,
+    styles: [
+        `
+        input{
+            width:95%;
+        }
+        input[type="checkbox"]:focus{
+            outline:none;
+        }
+        `
+    ]
 })
-export class DataTableBodyComponent implements OnInit {
+export class DataTableBodyComponent implements OnInit, AfterViewInit {
+    @Input() size: string;
     @Input() hover: boolean;
     @Input() bordered: boolean;
     @Input() striped: boolean;
     @Input() columns: DataTableColumn[];
+    @Input() fixed: string;
+    // tslint:disable-next-line:no-input-rename
+    // tslint:disable-next-line:no-input-rename
     @Input() rows: any[] = [];
     @Input() rowClassName: (row: any, index: number) => string;
     @Input() cellClassName: (value: any, col: any) => string;
+    edit = {};
     className = {};
     isRowTempl = false;
     selectedRowIndex = -1;
@@ -72,6 +103,7 @@ export class DataTableBodyComponent implements OnInit {
     }
 
     constructor(public el: ElementRef, private dataService: DataTableService,
+        private render: Renderer2,
         @Optional() public dt: DataTableComponent) { }
 
     ngOnInit() {
@@ -85,16 +117,22 @@ export class DataTableBodyComponent implements OnInit {
                 }
             });
         });
-        this.isRowTempl = this.rows.some(row => {
-            return row.hasOwnProperty('rowTempl');
-        });
-
-        // 设置column列 类
-        // this
-        // this.columns = convertColumns(this.columns, 'left');
-        // this.columns = convertColumns(this.columns, 'right');
+        if (this.rows) {
+            this.isRowTempl = this.rows.some(row => {
+                return row.hasOwnProperty('rowTempl');
+            });
+        }
+        if (this.fixed === 'left') {
+            this.columns = convertColumns(this.columns, 'left');
+        }
+        if (this.fixed === 'right') {
+            this.columns = convertColumns(this.columns, 'right');
+        }
     }
-    selectedRow(event: any, index: number, data: any) {
+    ngAfterViewInit() {
+
+    }
+    selectedRow(index: number, data: any) {
         if (this.dt.singleSelect) {
             if (this.selectedRowIndex !== index) {
                 this.selectedRowIndex = index;
@@ -115,7 +153,7 @@ export class DataTableBodyComponent implements OnInit {
                 this.dataService.selectedRow.next({ rowIndex: index, rowData: data });
             }
         }
-        event.stopPropagation();
+        // event.stopPropagation();
     }
 
     onChecked(event: any, index: number, row: any) {
@@ -181,4 +219,22 @@ export class DataTableBodyComponent implements OnInit {
     createRowClassName(row, index) {
         return this.rowClassName ? this.rowClassName(row, index) : '';
     }
+    /**
+     * 改变编辑类型  实现单元格可编辑
+     * @param {Object,number}
+     */
+    cellEdit(e, column, rowIndex) {
+        e.stopPropagation();
+        if (!column.edit) {
+            return;
+        }
+        this.edit[rowIndex + column.field] = true;
+    }
+    /**
+     * 可编辑框失去焦点
+     */
+    closeCellEdit(key) {
+        this.edit[key] = false;
+    }
+
 }

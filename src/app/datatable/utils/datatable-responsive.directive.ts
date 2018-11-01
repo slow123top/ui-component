@@ -1,4 +1,3 @@
-import { FarrisColDirective } from './../../../responsive/col/res-col.directive';
 import { Directive, Input, ElementRef, HostBinding, OnInit } from '@angular/core';
 @Directive({
     selector: '[farris-column-res]'

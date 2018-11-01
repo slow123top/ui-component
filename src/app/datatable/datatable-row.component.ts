@@ -1,4 +1,4 @@
-import { Component, Directive, OnInit, Input, ContentChild, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, OnInit, Input, ContentChild, TemplateRef } from '@angular/core';
 import { SlotDirective } from './datatable-slot.directive';
 @Directive({
     selector: 'data-row'

@@ -1,6 +1,8 @@
 th {
     &>div {
         display: inline-block;
+        float: right;
+        width: .5rem;
         &>span.sort-container {
             position: relative;
             display: inline-block;

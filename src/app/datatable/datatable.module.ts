@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import { InputsModule } from '@progress/kendo-angular-inputs';
+import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
+import { IntlModule } from '@progress/kendo-angular-intl';
 import { DataTableComponent } from './datatable.component';
 import { PerfectScrollbarModule } from '../../perfect-scorll';
 import { DataTableHeaderComponent } from './table/datatable-header.component';
@@ -19,23 +22,26 @@ import { RowDirective } from './datatable-row.component';
 
 import { DragColumnDirective } from './utils/drag.directive';
 import { FarrisColumnResDirective } from './utils/datatable-responsive.directive';
+import { FarrisHoverDirective } from './utils/datatable-hover.directive';
+import { FarrisEditFocusDirective } from './utils/datatable-edit-focus.directive';
 
-import { DatatableFixedComponent, DatatableFixedRightComponent } from './fixed/datatable-fixed.component';
-import { DataTableFixedRightHeaderComponent, DataTableFixedHeaderComponent } from './fixed/datatable-fixed-header.component';
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         PerfectScrollbarModule,
         PaginationModule,
-        FarrisCommonModule
+        FarrisCommonModule,
+        InputsModule,
+        DateInputsModule,
+        IntlModule
     ],
-    exports: [DataTableComponent, DataTableHeaderComponent, ColumnDirective, DataTableBodyComponent, DatatableFixedRightComponent,
-        FarrisCommonModule, DatatableFooterComponent, SlotDirective, RowDirective, DragColumnDirective, DatatableFixedComponent,
-        DataTableFixedRightHeaderComponent, DataTableFixedHeaderComponent, FarrisColumnResDirective],
-    declarations: [DataTableComponent, DataTableHeaderComponent, ColumnDirective, DragColumnDirective, DatatableFixedRightComponent,
-        DataTableBodyComponent, DTCheckboxComponent, DatatableFooterComponent, SlotDirective, RowDirective, DatatableFixedComponent,
-        DataTableFixedRightHeaderComponent, DataTableFixedHeaderComponent, FarrisColumnResDirective],
+    exports: [DataTableComponent, DataTableHeaderComponent, ColumnDirective, DataTableBodyComponent,
+        FarrisCommonModule, DatatableFooterComponent, SlotDirective,
+        RowDirective, DragColumnDirective, FarrisColumnResDirective, FarrisHoverDirective, FarrisEditFocusDirective],
+    declarations: [DataTableComponent, DataTableHeaderComponent, ColumnDirective, DragColumnDirective,
+        DataTableBodyComponent, DTCheckboxComponent, DatatableFooterComponent,
+        SlotDirective, RowDirective, FarrisColumnResDirective, FarrisHoverDirective, FarrisEditFocusDirective],
     providers: [DataTableService]
 })
 export class DataTableModule { }

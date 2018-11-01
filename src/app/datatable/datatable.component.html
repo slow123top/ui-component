@@ -1,5 +1,5 @@
 <div class="filter-row" [style.width]="width + 'px'" *ngIf="showFilterBar">
-    <form class="form-row">
+    <form class="form-row w-100">
         <div class="search-fields">
             <select class="custom-select" [(ngModel)]="searchData.field" name="field">
                 <option value="*">所有列</option>
@@ -19,42 +19,41 @@
 <div [ngStyle]="{'height': height +'px', 'width': width +'px' }" class="farris-datatable-container">
     <div class="farris-datatable">
         <div #tableHeader class="farris-table-header">
-            <datatable-header #dtHeader [columns]="columns" [singleSelect]="singleSelect"
-            [data]="copyData" 
-            [(rows)]="data"
-            (checkedAll)="onCheckAll($event)"
-            (sortChange)="headerSortChange($event)">
+            <datatable-header #dtHeader [size]="size" [columns]="columns" [singleSelect]="singleSelect" [data]="data"
+                (checkedAll)="onCheckAll($event)">
                 <ng-content select="data-columns"></ng-content>
             </datatable-header>
             <div class="farris-table-fixed-header" [style.width]="fixedLeftWidth" *ngIf="hasFixed">
-                <datatable-fixed-header #dtHeader [columns]="columns" [singleSelect]="singleSelect" (checkedAll)="onCheckAll($event)">
+                <datatable-header #dtLeftFixedHeader [size]="size" [columns]="columns" [data]="data" [singleSelect]="singleSelect"
+                [fixed]="'left'" (checkedAll)="onCheckAll($event)">
                     <ng-content select="data-columns"></ng-content>
-                </datatable-fixed-header>
+                </datatable-header>
             </div>
             <div class="farris-table-fixed-right-header" [style.width]="fixedRightWidth" *ngIf="hasFixed">
-                <datatable-fixed-right-header #dtHeader [columns]="columns" [singleSelect]="singleSelect" (checkedAll)="onCheckAll($event)">
+                <datatable-header #dtRightFixedHeader [size]="size" [columns]="columns" [singleSelect]="singleSelect"
+                [fixed]="'right'" [data]="data"
+                    (checkedAll)="onCheckAll($event)">
                     <ng-content select="data-columns"></ng-content>
-                </datatable-fixed-right-header>
+                </datatable-header>
             </div>
         </div>
         <div #scorllableBody class="farris-table-scorllable-body" [style.height]="scorllableBodyHeight + 'px'">
             <perfect-scrollbar #perfectScrollbar [config]="{}" (psScrollX)="onScrollX($event)" (psScrollY)="onScrollY($event)">
                 <ng-container [style.display]="data && data.length ? 'block': 'none'">
-                    <datatable-body #dtBody [rows]="data | paginate: paginationOptions" [columns]="columns" [striped]="striped"
-                        [bordered]="bordered" [hover]="hover" [rowClassName]="rowClassName"
-                        [cellClassName]="cellClassName">
+                    <datatable-body #dtBody [rows]="data | paginate: paginationOptions" [size]="size" [columns]="columns" [striped]="striped"
+                        [bordered]="bordered" [rowClassName]="rowClassName" [cellClassName]="cellClassName">
                     </datatable-body>
                     <div #dtLeftFixed class="farris-table-fixed-body" *ngIf="hasFixed" [style.width]="fixedLeftWidth">
-                        <datatable-fixed #dtBody [rows]="data | paginate: paginationOptions" [columns]="columns"
-                            [striped]="striped" [bordered]="bordered" [hover]="hover" [rowClassName]="rowClassName"
+                        <datatable-body #dtLeftBody [rows]="data | paginate: paginationOptions" [size]="size" [columns]="columns"
+                            [fixed]="'left'" [striped]="striped" [bordered]="bordered" [rowClassName]="rowClassName"
                             [cellClassName]="cellClassName">
-                        </datatable-fixed>
+                        </datatable-body>
                     </div>
                     <div #dtRightFixed class="farris-table-fixed-right-body" *ngIf="hasFixed" [style.width]="fixedRightWidth">
-                        <datatable-fixed-right #dtBody [rows]="data | paginate: paginationOptions" [columns]="columns"
-                            [striped]="striped" [bordered]="bordered" [hover]="hover" [rowClassName]="rowClassName"
+                        <datatable-body #dtRightBody [rows]="data | paginate: paginationOptions" [size]="size" [columns]="columns"
+                            [fixed]="'right'" [striped]="striped" [bordered]="bordered" [rowClassName]="rowClassName"
                             [cellClassName]="cellClassName">
-                        </datatable-fixed-right>
+                        </datatable-body>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="!(data && data.length)">

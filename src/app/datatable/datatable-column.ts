@@ -13,14 +13,14 @@ export interface DataTableColumn {
 }
 /**
  * 转换列的顺序
- * @param {DataTableColumn[]} 列数据
- * @param {string}   left|right 左固定或者右固定
+ * @param {DataTableColumn[]} columns-所有列数据
+ * @param {string} direction-left|right 左固定或者右固定
  */
 export const convertColumns = (columns, direction) => {
     const tempFixedColumns = [];
     const tempNotFixedColumns = [];
     columns.forEach(ele => {
-        if (ele.fixed && ele.fixed === direction) {
+        if (ele.fixed && (ele.fixed === direction || ele.fixed.type === direction)) {
             tempFixedColumns.push(ele);
         } else {
             tempNotFixedColumns.push(ele);
